@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Context from '../../context';
 import { ME_QUERY } from '../../graphql/queries';
-import {BASE_URL} from '../../client';
+import { BASE_URL } from '../../client';
 
 const Login = ({ classes }) => {
   const { dispatch } = useContext(Context);
@@ -29,6 +29,7 @@ const Login = ({ classes }) => {
 
   const onFailure = err => {
     console.error('error loggin in', err);
+    dispatch({ type: 'SIGNOUT_USER' });
   };
 
   return (

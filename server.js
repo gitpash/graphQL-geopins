@@ -23,8 +23,7 @@ const server = new ApolloServer({
 
     try {
       authToken = req.headers.authorization;
-      console.log('req.header: ', req.header);
-      console.log('authToken: ', authToken);
+
       if (authToken) {
         // find or create user
         currentUser = await findOrCreateUser(authToken);

@@ -52,12 +52,12 @@ const CreatePin = ({ classes }) => {
         draft: { latitude, longitude },
       } = state;
       const variables = { title, image: url, content, latitude, longitude };
-      const { createPin } = await client.request(
+      await client.request(
         CREATE_PIN_MUTATION,
         variables,
-      );
+        );
 
-      dispatch({ type: 'CREATE_PIN', payload: createPin });
+      // dispatch({ type: 'CREATE_PIN', payload: createPin });
       handleDeleteDraft();
     } catch (error) {
       setSubmitting(false);
