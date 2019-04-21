@@ -22,7 +22,7 @@ module.exports = gql`
 
   type Comment {
     text: String
-    createdat: String
+    createdAt: String
     author: User
   }
 
@@ -36,6 +36,7 @@ module.exports = gql`
 
   type Query {
     me: User
+    getPins: [Pin!]
   }
 
   type Mutation {
