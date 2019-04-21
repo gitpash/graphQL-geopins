@@ -11,7 +11,7 @@ module.exports = gql`
   type Pin {
     _id: ID
     createdAt: String
-    tite: String
+    title: String
     content: String
     image: String
     latitude: Float

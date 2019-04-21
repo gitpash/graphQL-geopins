@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
 import Context from '../context';
-import { NoContent, CreatePin, PinContent } from './Pin';
+import { NoContent, CreatePin } from './Pin';
 
 const Blog = ({ classes }) => {
   const {
