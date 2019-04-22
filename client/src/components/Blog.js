@@ -7,7 +7,7 @@ import { NoContent, CreatePin, PinContent } from './Pin';
 
 const Blog = ({ classes }) => {
   const {
-    state: { draft, currentPin },
+    state: { draft, currentPin, mobileSize },
   } = useContext(Context);
   let BlogContent;
 
@@ -20,7 +20,7 @@ const Blog = ({ classes }) => {
   }
 
   return (
-    <Paper className={classes.root}>
+    <Paper className={mobileSize ? classes.rootMobile : classes.root}>
       <BlogContent />
     </Paper>
   );

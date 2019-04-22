@@ -52,10 +52,7 @@ const CreatePin = ({ classes }) => {
         draft: { latitude, longitude },
       } = state;
       const variables = { title, image: url, content, latitude, longitude };
-      await client.request(
-        CREATE_PIN_MUTATION,
-        variables,
-        );
+      await client.request(CREATE_PIN_MUTATION, variables);
 
       // dispatch({ type: 'CREATE_PIN', payload: createPin });
       handleDeleteDraft();
@@ -109,7 +106,7 @@ const CreatePin = ({ classes }) => {
           name="content"
           label="content"
           multiline
-          rows="6"
+          rows={state.mobileSize ? '3' : '6'}
           margin="normal"
           fullWidth
           variant="outlined"

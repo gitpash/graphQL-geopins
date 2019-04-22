@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Context from '../../context';
 
 const Signout = ({ classes }) => {
-  const { dispatch } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
   const onSignout = () => {
     dispatch({ type: 'SIGNOUT_USER' });
     console.log('SIGNOUT_USER: ', 'SIGNOUT_USER');
@@ -18,9 +18,11 @@ const Signout = ({ classes }) => {
       onLogoutSuccess={onSignout}
       render={({ onClick }) => (
         <span onClick={onClick} className={classes.root}>
-          <Typography variant="body1" className={classes.buttonText}>
-            Signout
-          </Typography>
+          {!state.mobileSize && (
+            <Typography variant="body1" className={classes.buttonText}>
+              Signout
+            </Typography>
+          )}
           <ExitToAppIcon className={classes.buttonIcon} />
         </span>
       )}

@@ -28,6 +28,8 @@ const INITIAL_VIEWPORT = {
 const Map = ({ classes }) => {
   const client = useClient();
   const { state, dispatch } = useContext(Context);
+  const { currentUser, mobileSize, draft, pins } = state;
+
   useEffect(() => {
     getPins();
   }, []);
@@ -38,6 +40,15 @@ const Map = ({ classes }) => {
     getUserPosition();
   }, []);
   const [popup, setPopup] = useState(null);
+  // remove popup if it was deleted by author
+  useEffect(() => {
+    const isPinExist =
+      popup && pins.findIndex(({ _id }) => _id === popup._id) > -1;
+
+    if (!isPinExist) {
+      setPopup(null);
+    }
+  }, [pins.length]);
 
   const getUserPosition = () => {
     if ('geolocation' in navigator) {
@@ -57,7 +68,7 @@ const Map = ({ classes }) => {
 
   const handleMapClick = ({ lngLat, leftButton }) => {
     if (!leftButton) return;
-    if (!state.draft) {
+    if (!draft) {
       dispatch({ type: 'CREATE_DRAFT' });
     }
 
@@ -84,15 +95,16 @@ const Map = ({ classes }) => {
     setPopup(null);
   };
 
-  const isAuthUser = () => state.currentUser._id === popup.author._id;
+  const isAuthUser = () => currentUser._id === popup.author._id;
 
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ? classes.rootMobile : classes.root}>
       <ReactMapGL
         width="100vw"
         height="calc(100vh - 64px)"
         mapStyle="mapbox://styles/mapbox/streets-v9"
-        mapboxApiAccessToken="pk.eyJ1IjoicGF2ZWxsdXoiLCJhIjoiY2p1cGVuYjlhMzM3ZDQxb2F4MWtqdngxMCJ9.xY-dgK7TAMbB0OpDMDIF1w"
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+        scrollZoom={!mobileSize}
         onViewportChange={dynamicViewport => setViewport(dynamicViewport)}
         onClick={handleMapClick}
         {...viewport}
@@ -116,10 +128,10 @@ const Map = ({ classes }) => {
           </Marker>
         )}
         {/* Draft Pin */}
-        {state.draft && (
+        {draft && (
           <Marker
-            latitude={state.draft.latitude}
-            longitude={state.draft.longitude}
+            latitude={draft.latitude}
+            longitude={draft.longitude}
             offsetLeft={-19}
             offsetTop={-37}
           >
@@ -128,7 +140,7 @@ const Map = ({ classes }) => {
         )}
 
         {/* Created Pins */}
-        {state.pins.map(pin => (
+        {pins.map(pin => (
           <Marker
             key={pin._id}
             latitude={pin.latitude}
@@ -178,7 +190,6 @@ const Map = ({ classes }) => {
             data: { pinAdded },
           },
         }) => {
-          console.log('pinAdded: ', pinAdded);
           dispatch({ type: 'CREATE_PIN', payload: pinAdded });
         }}
       />
@@ -189,7 +200,6 @@ const Map = ({ classes }) => {
             data: { pinUpdated },
           },
         }) => {
-          console.log('pinUpdated: ', pinUpdated);
           dispatch({ type: 'CREATE_COMMENT', payload: pinUpdated });
         }}
       />
@@ -200,7 +210,6 @@ const Map = ({ classes }) => {
             data: { pinDeleted },
           },
         }) => {
-          console.log('pinDeleted: ', pinDeleted);
           dispatch({ type: 'DELETE_PIN', payload: pinDeleted });
         }}
       />

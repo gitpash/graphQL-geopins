@@ -1,5 +1,11 @@
 export default function reducer(state, { type, payload }) {
   switch (type) {
+    case 'DEFINE_MEDIA_QUERY':
+      return {
+        ...state,
+        mobileSize: payload,
+      };
+
     case 'LOGIN_USER':
       return {
         ...state,
@@ -56,10 +62,12 @@ export default function reducer(state, { type, payload }) {
       const filteredPins = state.pins.filter(
         ({ _id }) => _id !== deletedPin._id,
       );
+      const isCurrentPin = deletedPin._id === state.currentPin._id;
+
       return {
         ...state,
         pins: filteredPins,
-        currentPin: null,
+        currentPin: isCurrentPin ? null : state.currentPin,
       };
     case 'CREATE_COMMENT':
       const updatedCurrentPin = payload;
@@ -67,7 +75,6 @@ export default function reducer(state, { type, payload }) {
       const updatedPins = state.pins.map(pin =>
         pin._id === updatedCurrentPin._id ? updatedCurrentPin : pin,
       );
-
       return {
         ...state,
         pins: updatedPins,
